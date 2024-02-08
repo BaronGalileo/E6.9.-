@@ -37,11 +37,15 @@ class RegisterView(FormView):
 
 
 @login_required
-def create(request):
+def create(request, *args):
     error = ''
     name = request.POST.get("name", None)
+    user = UserPage.objects.all()
+
+
     if request.method == 'POST':
         form = AddRoom(request.POST)
+
 
         if form.is_valid():
             form = form.save(commit=False)

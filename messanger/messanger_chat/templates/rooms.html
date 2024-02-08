@@ -9,7 +9,7 @@
             {% if request.user.is_authenticated %}
                 <h1>Пользователи</h1>
             {% for name in profile %}
-    <img src="{{ name.foto.url }}" class="log"><h3>{{ name }}</h3>
+    <img src="{{ name.foto.url }}" class="log"><h3><a href="{% url 'add_room' %}"><li>{{ name }}</li></a></h3>
             {% endfor %}
     <p></p>
 <hr>
@@ -20,7 +20,18 @@
     {% if r.foto %}
     <img src="{{ r.foto.url }}" class="prof">
     <p>Это Я, {{ r.name}}</p>
+
     {% endif %}
+
+    {% for pr in r.privat.values %}
+    <td><p>Комната приватная<a href="{% url 'room' pr.id %}"><li>{{ pr.name }}</li></a></p></td>
+
+    {% endfor %}
+
+    {% for h in request.user.rooms.values %}
+    <td><p>Комнаты мои<a href="{% url 'room' h.id %}"><li>{{ h.name }}</li></a></p></td>
+
+    {% endfor %}
 
          {% if r.current_rooms %}
 

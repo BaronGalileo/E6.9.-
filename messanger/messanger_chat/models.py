@@ -10,6 +10,7 @@ class Room(models.Model):
     name = models.CharField(max_length=64, null=False, blank=False, unique=True)
     users = models.ManyToManyField('UserPage', blank=True, related_name='current_rooms')
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rooms")
+    privat = models.ForeignKey('UserPage', blank=True, null=True, on_delete=models.CASCADE, related_name="privat")
 
     class Meta:
         ordering = ["name"]
