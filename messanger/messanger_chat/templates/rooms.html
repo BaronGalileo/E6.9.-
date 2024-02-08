@@ -39,18 +39,7 @@
 
     {% endfor %}
 
-         {% if r.current_rooms %}
 
-
-
-    {% for i in r.current_rooms.values %}
-           <tr>
-
-               <td><p>Комната<a href="{% url 'room' i.id %}"><li>{{ i.name }}</li></a></p></td>
-
-           </tr>
-        {% endfor %}
-        {% endif %}
 {% endif %}
 {% endfor %}
 
