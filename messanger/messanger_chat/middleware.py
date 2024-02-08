@@ -24,7 +24,6 @@ ALGORITHM = "HS256"
 def get_user(token):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=ALGORITHM)
-        print('payload', payload)
     except:
         print('no payload')
 
@@ -36,7 +35,7 @@ def get_user(token):
 
     try:
         user = UserPage.objects.get(user_profile_id=payload['user_profile_id'])
-        print('user', user)
+
     except UserPage.DoesNotExist:
         print('no user')
 

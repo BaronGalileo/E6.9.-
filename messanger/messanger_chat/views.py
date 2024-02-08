@@ -54,7 +54,7 @@ def create(request):
             return HttpResponseRedirect(reverse("room", kwargs={"pk": Room.objects.get(name=name).pk}))
 
         else:
-            print(name)
+
             error = 'Форма была неверной'
 
     form = AddRoom()
@@ -63,7 +63,7 @@ def create(request):
         'form': form,
         'error': error
     }
-    print(error)
+
     return render(request, 'add_room.html', data)
 
 
@@ -125,5 +125,5 @@ def room(request, pk):
         'chat': chat,
         'user': profiles
     }
-    print(data)
+
     return render(request, 'room_api.html', data)
