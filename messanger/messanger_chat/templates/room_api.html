@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Chat Rooms</title>
+</head>
+<body>
+{% block content %}
+<div class="features">
+    <h1>Название комнаты : {{ room.name }}</h1>
+<h4>Создатель комнаты - <span id="username"></span></h4>
+
+        <h3>В комнате: <div class="log"></div></h3>
+
+    </div>
+<textarea id="chat-log" cols="100" rows="20"></textarea><br>
+<input id="chat-message-input" type="text" size="100"><br>
+<input id="chat-message-submit" type="button"  value="Отправить">
+
+<script>
+
+    const room_pk = "{{ room.pk }}";
+    const request_id = new Date().getTime()
+    const token = ''
+    console.log(room_pk)
+    console.log(request_id)
+    console.log("request", '{{request}}')
+    const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/?token=${localStorage.getItem('Token')}`);
+
+
+    chatSocket.onopen = function () {
+        chatSocket.send(
+            JSON.stringify({
+                pk: room_pk,
+                action: "join_room",
+                request_id: request_id,
+            })
+        );
+        chatSocket.send(
+            JSON.stringify({
+                pk: room_pk,
+                action: "retrieve",
+                request_id: request_id,
+            })
+        );
+        chatSocket.send(
+            JSON.stringify({
+                pk: room_pk,
+                action: "subscribe_to_messages_in_room",
+                request_id: request_id,
+            })
+        );
+        chatSocket.send(
+            JSON.stringify({
+                pk: room_pk,
+                action: "subscribe_instance",
+                request_id: request_id,
+            })
+        );
+    };
+
+
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data.data);
+        switch (data.action) {
+            case "retrieve":
+                console.log(data.action, data.data)
+                document.getElementById('username').innerText = data.data.host.username
+                  for (let us of data.data.users){
+                      document.querySelector('.log').innerHTML +=`<img src='${us.foto}'>` + `${us.name}` + '\n';
+                      console.log(us.name)
+                  }
+
+                  for (let mess of data.data.messages) {
+
+                     document.querySelector('#chat-log').value +=`${mess.author.name}` + " : " + `${mess.content}` + " --- " + `${mess.date_formatted}`  +'\n';
+
+                }
+
+                //setRoom(old =>data.data);
+                //setMessages(old=>data.messages);
+                break;
+              case "create":
+                        console.log(data.action, data.data);
+                        location.reload();
+                //setMessages(old=>[...old, data])
+                break;
+            default:
+                break;
+        }
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) { // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        let messageInputDom = document.querySelector('#chat-message-input');
+        let message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            action: "create_message",
+            request_id: request_id,
+        }));
+
+        messageInputDom.value = '';
+    };
+
+
+
+</script>
+{% endblock %}
+</body>
+
+</html>

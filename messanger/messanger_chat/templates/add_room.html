@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание объявления{% endblock %}
+
+{% block content %}
+<div class="features">
+<h1>Создание комнаты</h1>
+
+
+
+
+<form method="post" id="add_form">
+        {% csrf_token %}
+
+            {{ form.name }}<br>
+            {{ form.type }}<br>
+
+
+        <button type="submit" form="add_form" class="btn btn-warning">Отправить сообщение.</button>
+    </form>
+</div>
+{% endblock %}

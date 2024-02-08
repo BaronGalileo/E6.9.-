@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Создание объявления{% endblock %}
+
+{% block content %}
+<div class="features">
+<h1>{{ chat }}</h1>
+
+
+{% for i in chat.messages.values %}
+    {% for name in profiles.values %}
+
+    {% if name.user_profile_id == i.author_id%}
+
+        <img src="{{ name.foto.url }}" class="prof">
+        <td><p>{{name.name}}</p></td>
+        <td><p>{{i.content}}</p></td>
+        <td><p>{{i.date}}</p></td>
+    <hr>
+
+
+
+    </tr>
+
+
+
+    <a href="{% url 'room' chat.id %}" class="btn btn-danger">Удалить</a>
+    <a href="#add_form" onclick="addReport(`{{name.name}}`, `{{i.id}}`)" class="btn btn-info">Ответить</a>
+
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+
+<form method="post" id="add_form">
+        {% csrf_token %}
+        <input type="hidden" id="report_id" name="report">
+
+            {{ form.content }}<br>
+            {{ form.author }}<br>
+
+
+        <button type="submit" form="add_form" class="btn btn-warning">Отправить сообщение.</button>
+    <hr>
+</form>
+
+</div>
+<script>
+function addReport(autor, id){
+console.log(autor,id);
+document.getElementById('report_id').value = id;
+document.getElementById('cont').innerText = `${autor},`;
+console.log(name.name);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Главная страница
+{% endblock title %}
+
+{% block content %}
+<div class="features">
+            {% if request.user.is_authenticated %}
+                <h1>Пользователи</h1>
+            {% for name in profile %}
+    <img src="{{ name.foto.url }}" class="log"><h3>{{ name }}</h3>
+            {% endfor %}
+    <p></p>
+<hr>
+
+
+{% for r in profile %}
+{% if r.user_profile == request.user %}
+    {% if r.foto %}
+    <img src="{{ r.foto.url }}" class="prof">
+    <p>Это Я, {{ r.name}}</p>
+    {% endif %}
+
+         {% if r.current_rooms %}
+
+
+
+    {% for i in r.current_rooms.values %}
+           <tr>
+
+               <td><p>Комната<a href="{% url 'room' i.id %}"><li>{{ i.name }}</li></a></p></td>
+
+           </tr>
+        {% endfor %}
+        {% endif %}
+{% endif %}
+{% endfor %}
+
+                {% else %}
+
+              <h1>Регестрируйся и  общайся!</h1>
+            <p>Найди новых друзей!</p>
+
+            {% endif %}
+</div>
+{% endblock content %}

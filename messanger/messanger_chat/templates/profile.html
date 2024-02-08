@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+<div class="features">
+<h1>{{ profile }}</h1>
+    {% if profile.foto %}
+    <img src="{{ profile.foto.url }}" class="prof">
+    {% endif %}
+
+{% for i in chat.messages.all %}
+        <td><p>{{i.content}}</p></td>
+        <td><p>{{i.date}}</p></td>
+        <td><p>{{i.author}}</p></td>
+    </tr>
+
+    <a href="{% url 'room' i.room_from.id %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'room' i.room_from.id %}" class="btn btn-info">Ответить</a>
+
+
+    {% endfor %}
+
+
+<form method="post" id="add_form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+            {{ form.as_p}}<br>
+
+
+        <button type="submit" form="add_form" class="btn btn-warning">Редактировать</button>
+    </form>
+</div>
+{% endblock %}
