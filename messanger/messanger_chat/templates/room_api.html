@@ -12,6 +12,10 @@
 <div class="features">
     <h1>Название комнаты : {{ room.name }}</h1>
 <h4>Создатель комнаты - <span id="username"></span></h4>
+    {% if room.privat %}
+    <h4>Комната для {{ room.privat }} c {{ room.host.profile }}</h4>
+
+    {% endif %}
 
         <h3>В комнате: <div class="log"></div></h3>
 

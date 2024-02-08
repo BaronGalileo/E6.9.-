@@ -29,5 +29,5 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 
-token = create_token(2)
+token = create_token(1)
 print(token)
