@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление Комнаты{% endblock %}
+
+{% block content %}
+    <div class="features">
+        <h1>Форма для удаления </h1>
+        <form method="post">
+            {% csrf_token %}
+            <h2>{{ room.name}}</h2>
+
+          <button class="btn btn-danger" type="submit" value="Save">Удалить!</button>
+        </form>
+    </div>
+{% endblock %}

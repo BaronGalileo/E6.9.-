@@ -9,7 +9,8 @@
             {% if request.user.is_authenticated %}
                 <h1>Пользователи</h1>
             {% for name in profile %}
-    <img src="{{ name.foto.url }}" class="log"><h3><a href="{% url 'add_room' %}"><li>{{ name }}</li></a></h3>
+
+    <img src="{{ name.foto.url }}" class="log"><h3><a href="{% url 'addroompriv' name.user_profile.id %}"><li>{{ name }}</li></a></h3>
             {% endfor %}
     <p></p>
 <hr>
@@ -22,14 +23,19 @@
     <p>Это Я, {{ r.name}}</p>
 
     {% endif %}
-
     {% for pr in r.privat.values %}
-    <td><p>Комната приватная<a href="{% url 'room' pr.id %}"><li>{{ pr.name }}</li></a></p></td>
-
+    {% for us in profile.values %}
+     {% if us.user_profile_id ==  pr.host_id %}
+    <td><p>Комната приватная<a href="{% url 'room' pr.id %}"><li>{{ pr.name }} c {{ us.name }}</li></a></p></td>
+    {% endif %}
+    {% endfor %}
     {% endfor %}
 
     {% for h in request.user.rooms.values %}
     <td><p>Комнаты мои<a href="{% url 'room' h.id %}"><li>{{ h.name }}</li></a></p></td>
+    <a href="{% url 'room-delete' h.id %}"><li><button class="btn btn-warning">Удалить</button></li></a>
+
+
 
     {% endfor %}
 

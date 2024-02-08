@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -37,11 +37,49 @@ class RegisterView(FormView):
 
 
 @login_required
-def create(request, *args):
+def create(request, pk):
     error = ''
     name = request.POST.get("name", None)
-    user = UserPage.objects.all()
+    user_profil: UserPage = get_object_or_404(UserPage, pk=pk)
 
+    if request.method == 'POST':
+        form = AddRoom(request.POST)
+
+
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.host = request.user
+            form.privat = user_profil
+            form.save()
+
+            return HttpResponseRedirect(reverse("room", kwargs={"pk": Room.objects.get(name=name).pk}))
+
+        elif Room.objects.get(name=name):
+            return HttpResponseRedirect(reverse("room", kwargs={"pk": Room.objects.get(name=name).pk}))
+
+        else:
+
+            error = 'Форма была неверной'
+
+    form = AddRoom()
+
+    data = {
+        'form': form,
+        'error': error,
+        'user_profil': user_profil,
+    }
+    return render(request, 'add_room.html', data)
+
+class RoomDelete(DeleteView):
+    model = Room
+    template_name = 'delete.html'
+    context_object_name = 'room'
+    success_url = '/'
+
+@login_required
+def create_pub(request):
+    error = ''
+    name = request.POST.get("name", None)
 
     if request.method == 'POST':
         form = AddRoom(request.POST)
@@ -65,9 +103,9 @@ def create(request, *args):
 
     data = {
         'form': form,
-        'error': error
-    }
+        'error': error,
 
+    }
     return render(request, 'add_room.html', data)
 
 

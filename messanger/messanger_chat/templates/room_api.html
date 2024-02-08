@@ -19,6 +19,8 @@
 <textarea id="chat-log" cols="100" rows="20"></textarea><br>
 <input id="chat-message-input" type="text" size="100"><br>
 <input id="chat-message-submit" type="button"  value="Отправить">
+{{ room.id }}
+<a href="{% url 'room-delete' room.id %}"><li><button class="btn btn-warning">Удалить</button></li></a>
 
 <script>
 

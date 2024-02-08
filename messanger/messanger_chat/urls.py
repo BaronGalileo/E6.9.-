@@ -9,10 +9,12 @@ urlpatterns = [
     path('', ProfileList.as_view(), name='home'),
     path('test/', views.test, name='test'),
     path('register', RegisterView.as_view(), name="register"),
-    path('addroom', views.create, name='add_room'),
+    path('addroom', views.create_pub, name='add_room'),
     path('profile/<int:pk>', AccauntDetail.as_view(), name='profile'),
     path('addprofile', AccauntCreate.as_view(), name='addprofile'),
     path('room/<int:pk>', views.room, name='room'),
+    path('addroom/<int:pk>', views.create, name='addroompriv'),
+    path('delete/room/<int:pk>/', RoomDelete.as_view(), name='room-delete'),
 
 
 
