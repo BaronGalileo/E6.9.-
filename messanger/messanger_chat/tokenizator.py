@@ -23,11 +23,11 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=60)
+        expire = datetime.utcnow() + timedelta(minutes=120)
     to_encode.update({"exp": expire, "sub": access_token_jwt_subject})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-
-token = create_token(1)
+"""создание токена на 2 часа. Ввести нужно id профиля пользователя (он такой же как и user)"""
+token = create_token(2)
 print(token)
