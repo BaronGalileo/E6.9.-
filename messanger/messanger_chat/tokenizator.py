@@ -8,7 +8,7 @@ access_token_jwt_subject = "access"
 
 
 def create_token(user_profile_id: int) -> dict:
-    access_token_expires = timedelta(minutes=60)
+    access_token_expires = timedelta(minutes=120)
     return {
         "access_token": create_access_token(
             data={"user_profile_id": user_profile_id}, expires_delta=access_token_expires
